@@ -2,21 +2,12 @@ import sublime
 import sublime_plugin
 import re
 
-# Clone of surround.vim for SublimeText 2
+surround_settings = sublime.load_settings('surround.sublime-settings')
 
 
 class SurroundCommand(sublime_plugin.TextCommand):
     def surround_pairs_for_addition(self, surround):
-        pairs = {
-            '{': ['{ ', ' }'],
-            '}': ['{', '}'],
-            '[': ['[ ', ' ]'],
-            ']': ['[', ']'],
-            '(': ['( ', ' )'],
-            ')': ['(', ')'],
-            '<': ['< ', ' >'],
-            '>': ['<', '>']
-        }
+        pairs = surround_settings.get('surround_pairs_for_addition')
         return self.surround_pairs(surround, pairs)
 
     def surround_pairs(self, surround, pairs):
@@ -110,16 +101,7 @@ class SurroundChangeCommand(SurroundCommand):
         return surround
 
     def surround_pairs_for_search(self, surround):
-        pairs = {
-            '{': [u'{', u'}'],
-            '}': [u'{', u'}'],
-            '[': [u'[', u']'],
-            ']': [u'[', u']'],
-            '(': [u'(', u')'],
-            ')': [u'(', u')'],
-            '<': [u'<', u'>'],
-            '>': [u'<', u'>']
-        }
+        pairs = surround_settings.get('surround_pairs_for_search')
         return self.surround_pairs(surround, pairs)
 
     def surround_tags_for_search(self, surround):
