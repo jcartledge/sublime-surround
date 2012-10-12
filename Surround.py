@@ -2,6 +2,9 @@ import sublime
 import sublime_plugin
 import re
 
+import pprint
+pp = pprint.PrettyPrinter()
+
 # Clone of surround.vim for SublimeText 2
 
 
@@ -80,35 +83,45 @@ class SurroundChangeCommand(SurroundCommand):
 
         view = self.view
         for region in reversed(view.sel()):
-            end = view.find(search[0], region.end(), search[2])
-            view.replace(self.edit, end, replacement[0])
-            # find start, replace
 
-        return search, replacement  # FIXME REMOVE
+            # find end
+            end = view.find(search[1], region.end(), search[2])
+            if end:
+
+                # find start
+                start = None
+                possible_starts = view.find_all(search[0], search[2])
+                for possible_start in reversed(possible_starts):
+                    if possible_start.begin() < region.begin():
+                        start = possible_start
+                        break
+
+                if start:
+                    view.replace(self.edit, end, replacement[1])
+                    view.replace(self.edit, start, replacement[0])
 
     def surround_search_patterns(self, surround):
         surround = [surround, surround]
         surround = self.surround_pairs_for_search(surround)
         surround = self.surround_tags_for_search(surround)
 
-        if surround[0].len <= 1:
+        if len(surround[0]) <= 1:
             flag = sublime.LITERAL
         else:
-            flag = None
-
+            flag = 0
         surround.append(flag)
         return surround
 
     def surround_pairs_for_search(self, surround):
         pairs = {
-            '{': ['{', '}'],
-            '}': ['{', '}'],
-            '[': ['[', ']'],
-            ']': ['[', ']'],
-            '(': ['(', ')'],
-            ')': ['(', ')'],
-            '<': ['<', '>'],
-            '>': ['<', '>']
+            '{': [u'{', u'}'],
+            '}': [u'{', u'}'],
+            '[': [u'[', u']'],
+            ']': [u'[', u']'],
+            '(': [u'(', u')'],
+            ')': [u'(', u')'],
+            '<': [u'<', u'>'],
+            '>': [u'<', u'>']
         }
         return self.surround_pairs(surround, pairs)
 
@@ -116,11 +129,13 @@ class SurroundChangeCommand(SurroundCommand):
         matches = re.search(r"<([\S]+)([^>]*)>", surround[0])
         if matches:
             attrs = matches.group(2)
-            if attrs.len == 0:
+            if len(attrs) == 0:
                 attrs = '[^>]*'
-            open_tag = "<" + matches.group(1) + attrs + ">"
-            close_tag = "</" + matches.group(1) + ">"
+            open_tag = unicode("<" + matches.group(1) + attrs + ">")
+            close_tag = unicode("</" + matches.group(1) + ">")
             return [open_tag, close_tag]
+        else:
+            return surround
 
 
 class SurroundDeleteCommand(SurroundChangeCommand):
