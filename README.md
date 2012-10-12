@@ -14,7 +14,17 @@ The major piece missing is vim-surround compatible mappings for [Vintage](http:/
 
 ## Installation
 
-*blah*
+### Using Git
+
+Go to your Sublime Text 2 `Packages` directory and clone the repository using the command below:
+
+`$ git clone https://github.com/jcartledge/sublime-surround.git`
+
+### Download Manually
+
+Download the files using the .zip download option.  
+Unzip the files.  
+Copy the folder to your Sublime Text 2 Packages directory.
 
 ## Basic use
 
@@ -41,7 +51,7 @@ See below for more information about how search and surround text is handled.
 Surround understands the following pairs:
 
  * `{}`
- * `[]`
+ * `[]i`
  * `()`
  * `<>`
 
