@@ -41,7 +41,7 @@ See below for more information about how search and surround text is handled.
 Surround understands the following pairs:
 
  * `{}`
- * `[`
+ * `[]`
  * `()`
  * `<>`
 
@@ -78,8 +78,8 @@ There are no default key mappings; functionality is accessed through the Sublime
 There's nothing to stop you from creating mappings in your `User/Default.sublime-keymap` file. The commands you can map are:
 
  * `surround_selection`
- * `change_selection`
- * `delete_selection`
+ * `change_surround`
+ * `delete_surround`
 
 ## Contributing
 
