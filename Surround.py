@@ -78,8 +78,12 @@ class SurroundChangeCommand(SurroundCommand):
         search = self.surround_search_patterns(self.surround)
         replacement = self.surround_addition(replacement)
 
-        # match regexes
-        # replace with replacements uh
+        view = self.view
+        for region in reversed(view.sel()):
+            end = view.find(search[0], region.end(), search[2])
+            view.replace(self.edit, end, replacement[0])
+            # find start, replace
+
         return search, replacement  # FIXME REMOVE
 
     def surround_search_patterns(self, surround):
@@ -87,7 +91,7 @@ class SurroundChangeCommand(SurroundCommand):
         surround = self.surround_pairs_for_search(surround)
         surround = self.surround_tags_for_search(surround)
 
-        if surround[0].len == 1:
+        if surround[0].len <= 1:
             flag = sublime.LITERAL
         else:
             flag = None
