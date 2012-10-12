@@ -1,0 +1,11 @@
+[
+    {   "caption": "Surround: surround selection",
+        "command": "surround_selection"
+    },
+    {   "caption": "Surround: delete surround",
+        "command": "surround_delete"
+    },
+    {   "caption": "Surround: change surround",
+        "command": "surround_change"
+    }
+]

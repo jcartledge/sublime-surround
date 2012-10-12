@@ -2,9 +2,6 @@ import sublime
 import sublime_plugin
 import re
 
-import pprint
-pp = pprint.PrettyPrinter()
-
 # Clone of surround.vim for SublimeText 2
 
 
