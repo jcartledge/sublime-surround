@@ -41,12 +41,15 @@ class SurroundSelectionCommand(SurroundCommand):
     """
 
     def run(self, edit):
+        # If this is called from Vintage the selection will be reset as soon as
+        # the method returns, but we need it in the callback so we copy it here.
+        self.sel = [sel for sel in self.view.sel()]
         self.run_surround(edit, 'Surround with:', self.surround_selection)
 
     def surround_selection(self, surround):
         view = self.view
         surround = self.surround_addition(surround)
-        for region in reversed(view.sel()):
+        for region in reversed(self.sel):
             view.insert(self.edit, region.end(), surround[1])
             view.insert(self.edit, region.begin(), surround[0])
 
