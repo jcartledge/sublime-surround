@@ -30,6 +30,8 @@ Copy the folder to your Sublime Text 2 Packages directory.
 
 This plugin is not yet available in the Package Control repository but I have submitted a pull request to have it added there and will update these instructions if/when that happens.
 
+If you really can't wait, [here are instructions](http://wbond.net/sublime_packages/package_control/usage) (under **Add Repository**) for using Package Control to install plugins which are not in the official repository.
+
 ## Basic use
 
 All functionality is accessed through the SublimeText command palette: `CTRL-SHIFT-P` on Linux and Windows, `CMD-SHIFT-P` on Mac.
