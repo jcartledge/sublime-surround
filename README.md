@@ -26,6 +26,10 @@ Download the files using the .zip download option.
 Unzip the files.  
 Copy the folder to your Sublime Text 2 Packages directory.
 
+### Package Control
+
+This plugin is not yet available in the Package Control repository but I have submitted a pull request to have it added there and will update these instructions if/when that happens.
+
 ## Basic use
 
 All functionality is accessed through the SublimeText command palette: `CTRL-SHIFT-P` on Linux and Windows, `CMD-SHIFT-P` on Mac.
@@ -51,31 +55,86 @@ See below for more information about how search and surround text is handled.
 Surround understands the following pairs:
 
  * `{}`
- * `[]i`
+ * `[]`
  * `()`
  * `<>`
 
-As in vim-surround, specifying the opening item in a pair as surround text will add inner whitespace around the wrapped text. If you don't want whitespace use the closing item.
+As in vim-surround, specifying the opening symbol in a pair as surround text will add inner whitespace around the wrapped text. If you don't want whitespace use the closing symbol.
 
 Opening and closing items are interchangeable when specified as the text to replace or delete.
 
-*[example]*
+#### Examples:
+
+**Changing `James Cartledge jcartledge@gmail.com`  
+to `James Cartledge <jcartledge@gmail.com>`**
+
+* Select the email address
+* Invoke the Command Palette (`CTRL-SHIFT-P`/`CMD-SHIFT-P`)
+* Select **Surround: surround selection**
+* Type `>` and press enter
+
+Note we use the closing symbol so no internal whitespace is added.
+
+***
+
+**Changing `if (a > 100) doSomething();`  
+to `if (a > 100) { doSomething(); }`**
+
+* Select the text `doSomething();`
+* Invoke the Command Palette (`CTRL-SHIFT-P`/`CMD-SHIFT-P`)
+* Select **Surround: surround selection**
+* Type `{` and press enter
+
+Note here that use of the opening symbol results in addition of internal whitespace.
+
+***
+
+**Changing `if (a > 100) { doSomething(); }`  
+to `if (a > 100) doSomething();`**
+
+* Place the cursor within the text `doSomething();`
+* Invoke the Command Palette (`CTRL-SHIFT-P`/`CMD-SHIFT-P`)
+* Select **Surround: delete surround**
+* Type `{` or `}` and press enter
+
+Note that when used as a search pattern rather than a replacement pattern the opening and closing symbols are interchangeable.
+
+***
 
 ### Tag-aware
 
 HTML/XML tags with attributes are supported, but slightly differently to vim-surround.
 
-#### Tag as search text in Change surround or Delete surround:
+#### Examples
 
-*Search for the tag*
+**Changing `Email me for more information`  
+to `<a href="mailto:jcartledge@gmail.com">Email me</a> for more information`**
 
-#### Tag as surround text in Surround selection or Delete surround:
+* Select the text `Email me`
+* Invoke the Command Palette (`CTRL-SHIFT-P`/`CMD-SHIFT-P`)
+* Select **Surround: surround selection**
+* Type the opening tag including attributes: `<a href="mailto:jcartledge@gmail.com">` and press enter
+
+***
+
+**Changing `<div class="my-custom-header">lorem ipsum</div>`  
+to `<header>lorem ipsum</header>`**
+
+* Place the cursor within the text `lorem ipsum`
+* Invoke the Command Palette (`CTRL-SHIFT-P`/`CMD-SHIFT-P`)
+* Select **Surround: change surround**
+* Type the opening tag to replace: `<div>` and press enter
+* Type the replacement tag: `<header>`
+
+Note it's not necessary to specify attributes for the tag you're trying to match - by not specifying attributes you're telling the command to match that tag with no or any attributes. If you specify attributes only a tag with the exact attributes you specify will be matched.
+
+We don't specify any attributes for the replacement `header` tag here, but if we wanted to that would work fine just as in the mailto example above.
+
+***
 
 ### Regular expressions
 
-Any search text in change/delete is treated as a regular expression if it's longer than one character. (If everything was treated as a regular expression you'd have to escape things like braces and parentheses.)
-
-*Example of why this is cool.*
+Any search text in change/delete which is not a recognised pair or tag and is longer than a single character is treated as a regular expression.
 
 ### Multiple cursors/selections
 
