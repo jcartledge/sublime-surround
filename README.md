@@ -10,7 +10,7 @@ It makes it easy to do things like:
 
 It's a loving homage to [Tim Pope](https://github.com/tpope)'s [vim-surround](https://github.com/tpope/vim-surround), the yawning gap in my workflow when I switched from vim to SublimeText 2. While not a note-perfect port, I think it's a pretty nice translation of the concepts and functionality of the vim plugin to the sublime context.
 
-The major piece missing is vim-surround compatible mappings for [Vintage](http://www.sublimetext.com/docs/2/vintage.html). I haven't worked out how to do that yet, but it's top of the todo list.
+Vim-surround compatible mappings for [Vintage](http://www.sublimetext.com/docs/2/vintage.html) are available as a separate plugin here: <https://github.com/jcartledge/vintage-sublime-surround>
 
 ## Installation
 
@@ -152,6 +152,8 @@ There's nothing to stop you from creating mappings in your `User/Default.sublime
  * `change_surround`
  * `delete_surround`
 
+Vim-surround compatible mappings for [Vintage](http://www.sublimetext.com/docs/2/vintage.html) are available as a separate plugin here: <https://github.com/jcartledge/vintage-sublime-surround>
+
 ## Contributing
 
 Go nuts. Clean, linted pull requests please :)
@@ -163,8 +165,3 @@ I have never written Python before in my life (apart from a one-line patch to an
 ## Prior art
 
 There is (was? It doesn't seem to be on GitHub anymore...) another plugin with similar functionality, but I don't think it's very actively maintained and I was never able to get it to work properly.
-
-## Todo
-
-* vim-surround compatible vintage key mappings (possibly as a separate plugin)
-* make repeat (`.`) work
