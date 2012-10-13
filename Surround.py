@@ -56,7 +56,7 @@ class SurroundSelectionCommand(SurroundCommand):
 
 class SurroundChangeCommand(SurroundCommand):
     """
-    Change something surrounding the current insertion points to something else
+    Change something surrounding the current insertion point(s) to something else
     """
 
     def run(self, edit):
