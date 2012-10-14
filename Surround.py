@@ -77,19 +77,17 @@ class SurroundChangeCommand(SurroundCommand):
         edit = view.begin_edit()
         for region in reversed(view.sel()):
 
-            # find end
-            end = self.find_next(region.end(), search)
+            end = self.find_end(region.end(), search)
             if end:
 
-                # find start
-                start = self.find_previous(region.begin(), search)
+                start = self.find_start(region.begin(), search)
 
                 if start:
                     self.view.replace(edit, end, replacement[1])
                     self.view.replace(edit, start, replacement[0])
         view.end_edit(edit)
 
-    def find_previous(self, to_pos, search):
+    def find_start(self, to_pos, search):
         previous = self.find_between(0, to_pos, search).pop()
         # balance pairs
         close_search = [search[1], search[0], search[2]]
@@ -97,16 +95,16 @@ class SurroundChangeCommand(SurroundCommand):
         if count_closing_pairs % 2 is 0:
             return previous
         else:
-            return self.find_previous(previous.begin(), search)
+            return self.find_start(previous.begin(), search)
 
-    def find_next(self, from_pos, search):
+    def find_end(self, from_pos, search):
         next = self.view.find(search[1], from_pos, search[2])
         # balance pairs
         count_opening_pairs = len(self.find_between(from_pos, next.begin(), search))
         if count_opening_pairs % 2 is 0:
             return next
         else:
-            return self.find_next(next.end(), search)
+            return self.find_end(next.end(), search)
 
     def find_between(self, from_pos, to_pos, search):
         found = []
