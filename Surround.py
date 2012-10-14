@@ -29,8 +29,7 @@ class SurroundCommand(sublime_plugin.TextCommand):
         surround = self.surround_tags_for_addition(surround)
         return surround
 
-    def run_surround(self, edit, caption, callback):
-        self.edit = edit
+    def run_surround(self, caption, callback):
         window = self.view.window()
         window.show_input_panel(caption, '', callback, None, None)
 
@@ -44,14 +43,16 @@ class SurroundSelectionCommand(SurroundCommand):
         # If this is called from Vintage the selection will be reset as soon as
         # the method returns, but we need it in the callback so we copy it here.
         self.sel = [sel for sel in self.view.sel()]
-        self.run_surround(edit, 'Surround with:', self.surround_selection)
+        self.run_surround('Surround with:', self.surround_selection)
 
     def surround_selection(self, surround):
         view = self.view
         surround = self.surround_addition(surround)
+        edit = view.begin_edit()
         for region in reversed(self.sel):
-            view.insert(self.edit, region.end(), surround[1])
-            view.insert(self.edit, region.begin(), surround[0])
+            view.insert(edit, region.end(), surround[1])
+            view.insert(edit, region.begin(), surround[0])
+        view.end_edit(edit)
 
 
 class SurroundChangeCommand(SurroundCommand):
@@ -60,7 +61,7 @@ class SurroundChangeCommand(SurroundCommand):
     """
 
     def run(self, edit):
-        self.run_surround(edit, 'Match:', self.replace_with)
+        self.run_surround('Match:', self.replace_with)
 
     def replace_with(self, surround):
         self.surround = surround
@@ -73,6 +74,7 @@ class SurroundChangeCommand(SurroundCommand):
         replacement = self.surround_addition(replacement)
 
         view = self.view
+        edit = view.begin_edit()
         for region in reversed(view.sel()):
 
             # find end
@@ -83,8 +85,9 @@ class SurroundChangeCommand(SurroundCommand):
                 start = self.find_previous(region.begin(), search)
 
                 if start:
-                    self.view.replace(self.edit, end, replacement[1])
-                    self.view.replace(self.edit, start, replacement[0])
+                    self.view.replace(edit, end, replacement[1])
+                    self.view.replace(edit, start, replacement[0])
+        view.end_edit(edit)
 
     def find_previous(self, to_pos, search):
         previous = self.find_between(0, to_pos, search).pop()
@@ -148,7 +151,7 @@ class SurroundDeleteCommand(SurroundChangeCommand):
     """
 
     def run(self, edit):
-        self.run_surround(edit, 'Delete:', self.delete_surround)
+        self.run_surround('Delete:', self.delete_surround)
 
     def delete_surround(self, surround):
         self.surround = surround
