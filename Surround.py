@@ -76,20 +76,42 @@ class SurroundChangeCommand(SurroundCommand):
         for region in reversed(view.sel()):
 
             # find end
-            end = view.find(search[1], region.end(), search[2])
+            end = self.find_next(region.end(), search)
             if end:
 
                 # find start
-                start = None
-                possible_starts = view.find_all(search[0], search[2])
-                for possible_start in reversed(possible_starts):
-                    if possible_start.begin() < region.begin():
-                        start = possible_start
-                        break
+                start = self.find_previous(region.begin(), search)
 
                 if start:
-                    view.replace(self.edit, end, replacement[1])
-                    view.replace(self.edit, start, replacement[0])
+                    self.view.replace(self.edit, end, replacement[1])
+                    self.view.replace(self.edit, start, replacement[0])
+
+    def find_previous(self, to_pos, search):
+        previous = self.find_between(0, to_pos, search).pop()
+        # balance pairs
+        close_search = [search[1], search[0], search[2]]
+        count_closing_pairs = len(self.find_between(previous.end(), to_pos, close_search))
+        if count_closing_pairs % 2 is 0:
+            return previous
+        else:
+            return self.find_previous(previous.begin(), search)
+
+    def find_next(self, from_pos, search):
+        next = self.view.find(search[1], from_pos, search[2])
+        # balance pairs
+        count_opening_pairs = len(self.find_between(from_pos, next.begin(), search))
+        if count_opening_pairs % 2 is 0:
+            return next
+        else:
+            return self.find_next(next.end(), search)
+
+    def find_between(self, from_pos, to_pos, search):
+        found = []
+        possible_finds = self.view.find_all(search[0], search[2])
+        for possible_find in possible_finds:
+            if possible_find.end() <= to_pos and possible_find.begin() >= from_pos:
+                found.append(possible_find)
+        return found
 
     def surround_search_patterns(self, surround):
         surround = [surround, surround]
