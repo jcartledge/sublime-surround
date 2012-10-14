@@ -49,10 +49,12 @@ class SurroundSelectionCommand(SurroundCommand):
         view = self.view
         surround = self.surround_addition(surround)
         edit = view.begin_edit()
-        for region in reversed(self.sel):
-            view.insert(edit, region.end(), surround[1])
-            view.insert(edit, region.begin(), surround[0])
-        view.end_edit(edit)
+        try:
+            for region in reversed(self.sel):
+                view.insert(edit, region.end(), surround[1])
+                view.insert(edit, region.begin(), surround[0])
+        finally:
+            view.end_edit(edit)
 
 
 class SurroundChangeCommand(SurroundCommand):
@@ -74,17 +76,24 @@ class SurroundChangeCommand(SurroundCommand):
         replacement = self.surround_addition(replacement)
         view = self.view
         edit = view.begin_edit()
-        for region in reversed(view.sel()):
-            end = self.find_end(region.end(), search)
-            if end:
-                start = self.find_start(region.begin(), search)
-                if start:
-                    self.view.replace(edit, end, replacement[1])
-                    self.view.replace(edit, start, replacement[0])
-        view.end_edit(edit)
+        try:
+            for region in reversed(view.sel()):
+                end = self.find_end(region.end(), search)
+                if end:
+                    start = self.find_start(region.begin(), search)
+                    if start:
+                        self.view.replace(edit, end, replacement[1])
+                        self.view.replace(edit, start, replacement[0])
+        except RuntimeError as err:
+            sublime.error_message(str(err))
+        finally:
+            view.end_edit(edit)
 
     def find_start(self, to_pos, search):
-        previous = self.find_between(0, to_pos, search).pop()
+        matches = self.find_between(0, to_pos, search)
+        if len(matches) is 0:
+            raise RuntimeError('Starting pair not found: ' + search[0])
+        previous = matches.pop()
         # balance pairs
         close_search = [search[1], search[0], search[2]]
         count_closing_pairs = len(self.find_between(previous.end(), to_pos, close_search))
@@ -95,6 +104,8 @@ class SurroundChangeCommand(SurroundCommand):
 
     def find_end(self, from_pos, search):
         next = self.view.find(search[1], from_pos, search[2])
+        if next is None:
+            raise RuntimeError('Ending pair not found: ' + search[1])
         # balance pairs
         count_opening_pairs = len(self.find_between(from_pos, next.begin(), search))
         if count_opening_pairs % 2 is 0:
