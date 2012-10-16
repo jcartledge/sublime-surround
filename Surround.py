@@ -6,37 +6,38 @@ surround_settings = sublime.load_settings('surround.sublime-settings')
 
 
 class SurroundCommand(sublime_plugin.TextCommand):
-    def surround_pairs_for_addition(self, surround):
-        pairs = surround_settings.get('surround_pairs_for_addition')
-        return self.surround_pairs(surround, pairs)
+    """ Base class for surround commands
+    """
 
-    def surround_pairs(self, surround, pairs):
+    def pairs_for_replacement(self, surround):
+        pairs = surround_settings.get('surround_pairs_for_replacement')
+        return self.pair(surround, pairs)
+
+    def pair(self, surround, pairs):
         if surround[0] in pairs:
             return pairs[surround[0]]
         else:
             return surround
 
-    def surround_tags_for_addition(self, surround):
+    def tags_for_replacement(self, surround):
         matches = re.search(r"<([\S]+)[^>]*>", surround[0])
         if matches:
             return [surround[0], "</" + matches.group(1) + ">"]
         else:
             return surround
 
-    def surround_addition(self, surround):
+    def preprocess_replacement(self, surround):
         surround = [surround, surround]
-        surround = self.surround_pairs_for_addition(surround)
-        surround = self.surround_tags_for_addition(surround)
+        surround = self.pairs_for_replacement(surround)
+        surround = self.tags_for_replacement(surround)
         return surround
 
     def run_surround(self, caption, callback):
-        window = self.view.window()
-        window.show_input_panel(caption, '', callback, None, None)
+        self.view.window().show_input_panel(caption, '', callback, None, None)
 
 
 class SurroundSelectionCommand(SurroundCommand):
-    """
-    Surround the current selection(s) with something
+    """ Surround the current selection(s) with something
     """
 
     def run(self, edit):
@@ -47,7 +48,7 @@ class SurroundSelectionCommand(SurroundCommand):
 
     def surround_selection(self, surround):
         view = self.view
-        surround = self.surround_addition(surround)
+        surround = self.preprocess_replacement(surround)
         edit = view.begin_edit()
         try:
             for region in reversed(self.sel):
@@ -58,8 +59,7 @@ class SurroundSelectionCommand(SurroundCommand):
 
 
 class SurroundChangeCommand(SurroundCommand):
-    """
-    Change something surrounding the current insertion point(s) to something else
+    """ Change something surrounding the current insertion point(s) to something else
     """
 
     def run(self, edit):
@@ -72,8 +72,8 @@ class SurroundChangeCommand(SurroundCommand):
             'Replace with:', '', self.replace_surround, None, None)
 
     def replace_surround(self, replacement):
-        search = self.surround_search_patterns(self.surround)
-        replacement = self.surround_addition(replacement)
+        search = self.search_patterns_for_surround(self.surround)
+        replacement = self.preprocess_replacement(replacement)
         view = self.view
         edit = view.begin_edit()
         try:
@@ -96,8 +96,8 @@ class SurroundChangeCommand(SurroundCommand):
         previous = matches.pop()
         # balance pairs
         close_search = [search[1], search[0], search[2]]
-        count_closing_pairs = len(self.find_between(previous.end(), to_pos, close_search))
-        if count_closing_pairs % 2 is 0:
+        count_pairs = len(self.find_between(previous.end(), to_pos, close_search))
+        if count_pairs % 2 is 0:
             return previous
         else:
             return self.find_start(previous.begin(), search)
@@ -107,24 +107,21 @@ class SurroundChangeCommand(SurroundCommand):
         if next is None:
             raise RuntimeError('Ending pair not found: ' + search[1])
         # balance pairs
-        count_opening_pairs = len(self.find_between(from_pos, next.begin(), search))
-        if count_opening_pairs % 2 is 0:
+        count_pairs = len(self.find_between(from_pos, next.begin(), search))
+        if count_pairs % 2 is 0:
             return next
         else:
             return self.find_end(next.end(), search)
 
     def find_between(self, from_pos, to_pos, search):
-        found = []
-        possible_finds = self.view.find_all(search[0], search[2])
-        for possible_find in possible_finds:
-            if possible_find.end() <= to_pos and possible_find.begin() >= from_pos:
-                found.append(possible_find)
-        return found
+        return [find for find in self.view.find_all(search[0], search[2])
+            if find.end() <= to_pos
+            and find.begin() >= from_pos]
 
-    def surround_search_patterns(self, surround):
+    def search_patterns_for_surround(self, surround):
         surround = [surround, surround]
-        surround = self.surround_pairs_for_search(surround)
-        surround = self.surround_tags_for_search(surround)
+        surround = self.pairs_for_search(surround)
+        surround = self.tags_for_search(surround)
         if len(surround[0]) <= 1:
             flag = sublime.LITERAL
         else:
@@ -132,11 +129,11 @@ class SurroundChangeCommand(SurroundCommand):
         surround.append(flag)
         return surround
 
-    def surround_pairs_for_search(self, surround):
+    def pairs_for_search(self, surround):
         pairs = surround_settings.get('surround_pairs_for_search')
-        return self.surround_pairs(surround, pairs)
+        return self.pair(surround, pairs)
 
-    def surround_tags_for_search(self, surround):
+    def tags_for_search(self, surround):
         matches = re.search(r"<([\S]+)([^>]*)>", surround[0])
         if matches:
             attrs = matches.group(2)
@@ -150,8 +147,7 @@ class SurroundChangeCommand(SurroundCommand):
 
 
 class SurroundDeleteCommand(SurroundChangeCommand):
-    """
-    Delete something surrounding current insertion point(s)
+    """ Delete something surrounding current insertion point(s)
     """
 
     def run(self, edit):
