@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <link href='https://fonts.googleapis.com/css?family=Chivo:900' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <title>Sublime-surround by jcartledge</title>
+  </head>
+
+  <body>
+    <div id="container">
+      <div class="inner">
+
+        <header>
+          <h1>Sublime-surround</h1>
+          <h2>Sublime-surround is a SublimeText 2 plugin for adding, deleting and modifying text around the cursor or selection.</h2>
+        </header>
+
+        <section id="downloads" class="clearfix">
+          <a href="https://github.com/jcartledge/sublime-surround/zipball/master" id="download-zip" class="button"><span>Download .zip</span></a>
+          <a href="https://github.com/jcartledge/sublime-surround/tarball/master" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="https://github.com/jcartledge/sublime-surround" id="view-on-github" class="button"><span>View on GitHub</span></a>
+        </section>
+
+        <hr>
+
+        <section id="main_content">
+          <h1>sublime-surround</h1>
+
+<p>Sublime-surround is a <a href="http://www.sublimetext.com/">SublimeText 2</a> plugin for adding, deleting and modifying text around the cursor or selection.</p>
+
+<p>It makes it easy to do things like:</p>
+
+<ul>
+<li>Change single quotes to double quotes</li>
+<li>Change parentheses to square brackets</li>
+<li>Change <code>&lt;div id="my-custom-oldschool-header"&gt;lorem ipsum&lt;/div&gt;</code> to <code>&lt;header&gt;lorem ipsum&lt;/header&gt;</code>
+</li>
+</ul><p>It's a loving homage to <a href="https://github.com/tpope">Tim Pope</a>'s <a href="https://github.com/tpope/vim-surround">vim-surround</a>, the yawning gap in my workflow when I switched from vim to SublimeText 2. While not a note-perfect port, I think it's a pretty nice translation of the concepts and functionality of the vim plugin to the sublime context.</p>
+
+<p>Vim-surround compatible mappings for <a href="http://www.sublimetext.com/docs/2/vintage.html">Vintage</a> are available as a separate plugin here: <a href="https://github.com/jcartledge/vintage-sublime-surround">https://github.com/jcartledge/vintage-sublime-surround</a></p>
+
+<h2>Installation</h2>
+
+<h3>Using Git</h3>
+
+<p>Go to your Sublime Text 2 <code>Packages</code> directory and clone the repository using the command below:</p>
+
+<p><code>$ git clone https://github.com/jcartledge/sublime-surround.git</code></p>
+
+<h3>Download Manually</h3>
+
+<p>Download the files using the .zip download option.<br>
+Unzip the files.<br>
+Copy the folder to your Sublime Text 2 Packages directory.</p>
+
+<h3>Package Control</h3>
+
+<p>This plugin is not yet available in the Package Control repository but I have submitted a pull request to have it added there and will update these instructions if/when that happens.</p>
+
+<p>If you really can't wait, <a href="http://wbond.net/sublime_packages/package_control/usage">here are instructions</a> (under <strong>Add Repository</strong>) for using Package Control to install plugins which are not in the official repository.</p>
+
+<h2>Basic use</h2>
+
+<p>All functionality is accessed through the SublimeText command palette: <code>CTRL-SHIFT-P</code> on Linux and Windows, <code>CMD-SHIFT-P</code> on Mac.</p>
+
+<p>There are three commands:</p>
+
+<ul>
+<li><strong>Surround: surround selection</strong></li>
+<li><strong>Surround: change surround</strong></li>
+<li><strong>Surround: delete surround</strong></li>
+</ul><p><strong>Surround selection</strong> works on the current selection or selections. It prompts for the text to surround the selection with.</p>
+
+<p><strong>Change surround</strong> works on the current cursor or cursors. It prompts for wrapper text to replace, then for the text to replace it with.</p>
+
+<p><strong>Delete surround</strong> works on the current cursor or cursors. It prompts for wrapper text to delete. It is a special case of <strong>Change surround</strong> where the replacement is the empty string.</p>
+
+<p>See below for more information about how search and surround text is handled.</p>
+
+<h2>Features</h2>
+
+<h3>Pair-aware</h3>
+
+<p>Surround understands the following pairs:</p>
+
+<ul>
+<li><code>{}</code></li>
+<li><code>[]</code></li>
+<li><code>()</code></li>
+<li><code>&lt;&gt;</code></li>
+</ul><p>As in vim-surround, specifying the opening symbol in a pair as surround text will add inner whitespace around the wrapped text. If you don't want whitespace use the closing symbol.</p>
+
+<p>Opening and closing items are interchangeable when specified as the text to replace or delete.</p>
+
+<h4>Examples:</h4>
+
+<p><strong>Changing <code>James Cartledge jcartledge@gmail.com</code><br>
+to <code>James Cartledge &lt;jcartledge@gmail.com&gt;</code></strong></p>
+
+<ul>
+<li>Select the email address</li>
+<li>Invoke the Command Palette (<code>CTRL-SHIFT-P</code>/<code>CMD-SHIFT-P</code>)</li>
+<li>Select <strong>Surround: surround selection</strong>
+</li>
+<li>Type <code>&gt;</code> and press enter</li>
+</ul><p>Note we use the closing symbol so no internal whitespace is added.</p>
+
+<hr><p><strong>Changing <code>if (a &gt; 100) doSomething();</code><br>
+to <code>if (a &gt; 100) { doSomething(); }</code></strong></p>
+
+<ul>
+<li>Select the text <code>doSomething();</code>
+</li>
+<li>Invoke the Command Palette (<code>CTRL-SHIFT-P</code>/<code>CMD-SHIFT-P</code>)</li>
+<li>Select <strong>Surround: surround selection</strong>
+</li>
+<li>Type <code>{</code> and press enter</li>
+</ul><p>Note here that use of the opening symbol results in addition of internal whitespace.</p>
+
+<hr><p><strong>Changing <code>if (a &gt; 100) { doSomething(); }</code><br>
+to <code>if (a &gt; 100) doSomething();</code></strong></p>
+
+<ul>
+<li>Place the cursor within the text <code>doSomething();</code>
+</li>
+<li>Invoke the Command Palette (<code>CTRL-SHIFT-P</code>/<code>CMD-SHIFT-P</code>)</li>
+<li>Select <strong>Surround: delete surround</strong>
+</li>
+<li>Type <code>{</code> or <code>}</code> and press enter</li>
+</ul><p>Note that when used as a search pattern rather than a replacement pattern the opening and closing symbols are interchangeable.</p>
+
+<hr><h3>Tag-aware</h3>
+
+<p>HTML/XML tags with attributes are supported, but slightly differently to vim-surround.</p>
+
+<h4>Examples</h4>
+
+<p><strong>Changing <code>Email me for more information</code><br>
+to <code>&lt;a href="mailto:jcartledge@gmail.com"&gt;Email me&lt;/a&gt; for more information</code></strong></p>
+
+<ul>
+<li>Select the text <code>Email me</code>
+</li>
+<li>Invoke the Command Palette (<code>CTRL-SHIFT-P</code>/<code>CMD-SHIFT-P</code>)</li>
+<li>Select <strong>Surround: surround selection</strong>
+</li>
+<li>Type the opening tag including attributes: <code>&lt;a href="mailto:jcartledge@gmail.com"&gt;</code> and press enter</li>
+</ul><hr><p><strong>Changing <code>&lt;div class="my-custom-header"&gt;lorem ipsum&lt;/div&gt;</code><br>
+to <code>&lt;header&gt;lorem ipsum&lt;/header&gt;</code></strong></p>
+
+<ul>
+<li>Place the cursor within the text <code>lorem ipsum</code>
+</li>
+<li>Invoke the Command Palette (<code>CTRL-SHIFT-P</code>/<code>CMD-SHIFT-P</code>)</li>
+<li>Select <strong>Surround: change surround</strong>
+</li>
+<li>Type the opening tag to replace: <code>&lt;div&gt;</code> and press enter</li>
+<li>Type the replacement tag: <code>&lt;header&gt;</code>
+</li>
+</ul><p>Note it's not necessary to specify attributes for the tag you're trying to match - by not specifying attributes you're telling the command to match that tag with no or any attributes. If you specify attributes only a tag with the exact attributes you specify will be matched.</p>
+
+<p>We don't specify any attributes for the replacement <code>header</code> tag here, but if we wanted to that would work fine just as in the mailto example above.</p>
+
+<hr><h3>Regular expressions</h3>
+
+<p>Any search text in change/delete which is not a recognised pair or tag and is longer than a single character is treated as a regular expression.</p>
+
+<h3>Multiple cursors/selections</h3>
+
+<p>Surround <em>should</em> support multiple cursors and selections fine, but this hasn't been tested very thoroughly as I don't really use them.</p>
+
+<h2>Mappings</h2>
+
+<p>There are no default key mappings; functionality is accessed through the SublimeText command palette.</p>
+
+<p>There's nothing to stop you from creating mappings in your <code>User/Default.sublime-keymap</code> file. The commands you can map are:</p>
+
+<ul>
+<li><code>surround_selection</code></li>
+<li><code>change_surround</code></li>
+<li><code>delete_surround</code></li>
+</ul><p>Vim-surround compatible mappings for <a href="http://www.sublimetext.com/docs/2/vintage.html">Vintage</a> are available as a separate plugin here: <a href="https://github.com/jcartledge/vintage-sublime-surround">https://github.com/jcartledge/vintage-sublime-surround</a></p>
+
+<h2>Contributing</h2>
+
+<p>Go nuts. Clean, linted pull requests please :)</p>
+
+<h2>Disclaimer</h2>
+
+<p>I have never written Python before in my life (apart from a one-line patch to another SublimeText plugin.) It's a great testament to the design of Python and the SublimeText 2 plugin API that I got this far. You have been warned.</p>
+
+<h2>Prior art</h2>
+
+<p>There is (was? It doesn't seem to be on GitHub anymore...) another plugin with similar functionality, but I don't think it's very actively maintained and I was never able to get it to work properly.</p>
+        </section>
+
+        <footer>
+          Sublime-surround is maintained by <a href="https://github.com/jcartledge">jcartledge</a><br>
+          This page was generated by <a href="http://pages.github.com">GitHub Pages</a>. Tactile theme by <a href="http://twitter.com/jasonlong">Jason Long</a>.
+        </footer>
+
+                  <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-35745224-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+      </div>
+    </div>
+  </body>
+</html>
