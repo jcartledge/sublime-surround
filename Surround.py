@@ -11,6 +11,17 @@ class SurroundCommand(sublime_plugin.TextCommand):
 
     def pairs_for_replacement(self, surround):
         pairs = surround_settings.get('surround_pairs_for_replacement')
+        if pairs is None:
+            pairs = {
+                "{": ["{ ", " }"],
+                "}": ["{", "}"],
+                "[": ["[ ", " ]"],
+                "]": ["[", "]"],
+                "(": ["( ", " )"],
+                ")": ["(", ")"],
+                "<": ["< ", " >"],
+                ">": ["<", ">"]
+            }
         return self.pair(surround, pairs)
 
     def pair(self, surround, pairs):
@@ -129,9 +140,20 @@ class SurroundChangeCommand(SurroundCommand):
         surround.append(flag)
         return surround
 
-    def pairs_for_search(self, surround):
-        pairs = surround_settings.get('surround_pairs_for_search')
-        return self.pair(surround, pairs)
+        def pairs_for_search(self, surround):
+            pairs = surround_settings.get('surround_pairs_for_search')
+            if pairs is None:
+                pairs = {
+                    "{": ["{", "}"],
+                    "}": ["{", "}"],
+                    "[": ["[", "]"],
+                    "]": ["[", "]"],
+                    "(": ["(", ")"],
+                    ")": ["(", ")"],
+                    "<": ["<", ">"],
+                    ">": ["<", ">"]
+                }
+            return self.pair(surround, pairs)
 
     def tags_for_search(self, surround):
         matches = re.search(r"<([\S]+)([^>]*)>", surround[0])
