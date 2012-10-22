@@ -14,6 +14,12 @@ Vim-surround compatible mappings for [Vintage](http://www.sublimetext.com/docs/2
 
 ## Installation
 
+### Package Control
+
+[Package Control](http://wbond.net/sublime_packages/package_control) is "a full-featured package manager that helps discovering, installing, updating and removing packages for Sublime Text 2." It's the preferred way to manage your Sublime Text 2 Packages directory.
+
+[Follow these instructions](http://wbond.net/sublime_packages/package_control/usage) to install Sublime-surround with Package Control.
+
 ### Using Git
 
 Go to your Sublime Text 2 `Packages` directory and clone the repository using the command below:
@@ -25,12 +31,6 @@ Go to your Sublime Text 2 `Packages` directory and clone the repository using th
 Download the files using the .zip download option.  
 Unzip the files.  
 Copy the folder to your Sublime Text 2 Packages directory.
-
-### Package Control
-
-This plugin is not yet available in the Package Control repository but I have submitted a pull request to have it added there and will update these instructions if/when that happens.
-
-If you really can't wait, [here are instructions](http://wbond.net/sublime_packages/package_control/usage) (under **Add Repository**) for using Package Control to install plugins which are not in the official repository.
 
 ## Basic use
 
