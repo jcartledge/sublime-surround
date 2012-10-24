@@ -2,30 +2,17 @@ import sublime
 import sublime_plugin
 import re
 
-surround_settings = sublime.load_settings('surround.sublime-settings')
-
 
 class SurroundCommand(sublime_plugin.TextCommand):
     """ Base class for surround commands
     """
 
+    def __init__(self, _):
+        self.settings = sublime.load_settings('surround.sublime-settings')
+        sublime_plugin.TextCommand.__init__(self, _)
+
     def pairs_for_replacement(self, surround):
-        pairs = surround_settings.get('surround_pairs_for_replacement')
-        if pairs is None:
-            pairs = {
-                "{": ["{ ", " }"],
-                "}": ["{", "}"],
-                "[": ["[ ", " ]"],
-                "]": ["[", "]"],
-                "(": ["( ", " )"],
-                ")": ["(", ")"],
-                "<": ["< ", " >"],
-                ">": ["<", ">"],
-                "<!--": ["<!-- ", " -->"],
-                "-->": ["<!--", "-->"],
-                "/*": ["/* ", " */"],
-                "*/": ["/*", "*/"]
-            }
+        pairs = self.settings.get('surround_pairs_for_replacement')
         return self.pair(surround, pairs)
 
     def pair(self, surround, pairs):
@@ -145,22 +132,7 @@ class SurroundChangeCommand(SurroundCommand):
         return surround
 
     def pairs_for_search(self, surround):
-        pairs = surround_settings.get('surround_pairs_for_search')
-        if pairs is None:
-            pairs = {
-                "{": ["{", "}"],
-                "}": ["{", "}"],
-                "[": ["[", "]"],
-                "]": ["[", "]"],
-                "(": ["(", ")"],
-                ")": ["(", ")"],
-                "<": ["<", ">"],
-                ">": ["<", ">"],
-                "<!--": ["<!--", "-->"],
-                "-->": ["<!--", "-->"],
-                "/*": ["/*", "*/"],
-                "*/": ["/*", "*/"],
-            }
+        pairs = self.settings.get('surround_pairs_for_search')
         return self.pair(surround, pairs)
 
     def tags_for_search(self, surround):
