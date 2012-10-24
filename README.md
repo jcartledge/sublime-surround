@@ -16,13 +16,13 @@ Vim-surround compatible mappings for [Vintage](http://www.sublimetext.com/docs/2
 
 ### Package Control
 
-[Package Control](http://wbond.net/sublime_packages/package_control) is "a full-featured package manager that helps discovering, installing, updating and removing packages for Sublime Text 2." It's the preferred way to manage your Sublime Text 2 Packages directory.
+[Package Control](http://wbond.net/sublime_packages/package_control) is "a full-featured package manager that helps discovering, installing, updating and removing packages for SublimeText 2." It's the preferred way to manage your SublimeText 2 Packages directory.
 
 [Follow these instructions](http://wbond.net/sublime_packages/package_control/usage) to install Sublime-surround with Package Control.
 
 ### Using Git
 
-Go to your Sublime Text 2 `Packages` directory and clone the repository using the command below:
+Go to your SublimeText 2 `Packages` directory and clone the repository using the command below:
 
 `$ git clone https://github.com/jcartledge/sublime-surround.git`
 
@@ -30,7 +30,7 @@ Go to your Sublime Text 2 `Packages` directory and clone the repository using th
 
 Download the files using the .zip download option.  
 Unzip the files.  
-Copy the folder to your Sublime Text 2 Packages directory.
+Copy the folder to your SublimeText 2 Packages directory.
 
 ## Basic use
 
@@ -56,14 +56,16 @@ See below for more information about how search and surround text is handled.
 
 Surround understands the following pairs:
 
- * `{}`
- * `[]`
- * `()`
- * `<>`
+ * `{ }`
+ * `[ ]`
+ * `( )`
+ * `< >`
+ * `/* */`
+ * `<!-- -->`
 
 As in vim-surround, specifying the opening symbol in a pair as surround text will add inner whitespace around the wrapped text. If you don't want whitespace use the closing symbol.
 
-Opening and closing items are interchangeable when specified as the text to replace or delete.
+The same rule applies when specifying text to replace or delete, but either symbol will work if there is no internal whitespace.
 
 #### Examples:
 
@@ -97,9 +99,9 @@ to `if (a > 100) doSomething();`**
 * Place the cursor within the text `doSomething();`
 * Invoke the Command Palette (`CTRL-SHIFT-P`/`CMD-SHIFT-P`)
 * Select **Surround: delete surround**
-* Type `{` or `}` and press enter
+* Type `{` and press enter
 
-Note that when used as a search pattern rather than a replacement pattern the opening and closing symbols are interchangeable.
+Note that by using the opening brace we remove the internal whitespace as well as the surrounding braces. You can specify the closing brace if you want to retain the whitespace. (If there was no internal whitespace either symbol would work to remove the braces.)
 
 ***
 
