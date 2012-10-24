@@ -50,13 +50,13 @@
 
 <h3>Package Control</h3>
 
-<p><a href="http://wbond.net/sublime_packages/package_control">Package Control</a> is "a full-featured package manager that helps discovering, installing, updating and removing packages for Sublime Text 2." It's the preferred way to manage your Sublime Text 2 Packages directory.</p>
+<p><a href="http://wbond.net/sublime_packages/package_control">Package Control</a> is "a full-featured package manager that helps discovering, installing, updating and removing packages for SublimeText 2." It's the preferred way to manage your SublimeText 2 Packages directory.</p>
 
 <p><a href="http://wbond.net/sublime_packages/package_control/usage">Follow these instructions</a> to install Sublime-surround with Package Control.</p>
 
 <h3>Using Git</h3>
 
-<p>Go to your Sublime Text 2 <code>Packages</code> directory and clone the repository using the command below:</p>
+<p>Go to your SublimeText 2 <code>Packages</code> directory and clone the repository using the command below:</p>
 
 <p><code>$ git clone https://github.com/jcartledge/sublime-surround.git</code></p>
 
@@ -64,7 +64,7 @@
 
 <p>Download the files using the .zip download option.<br>
 Unzip the files.<br>
-Copy the folder to your Sublime Text 2 Packages directory.</p>
+Copy the folder to your SublimeText 2 Packages directory.</p>
 
 <h2>Basic use</h2>
 
@@ -91,13 +91,15 @@ Copy the folder to your Sublime Text 2 Packages directory.</p>
 <p>Surround understands the following pairs:</p>
 
 <ul>
-<li><code>{}</code></li>
-<li><code>[]</code></li>
-<li><code>()</code></li>
-<li><code>&lt;&gt;</code></li>
+<li><code>{ }</code></li>
+<li><code>[ ]</code></li>
+<li><code>( )</code></li>
+<li><code>&lt; &gt;</code></li>
+<li><code>/* */</code></li>
+<li><code>&lt;!-- --&gt;</code></li>
 </ul><p>As in vim-surround, specifying the opening symbol in a pair as surround text will add inner whitespace around the wrapped text. If you don't want whitespace use the closing symbol.</p>
 
-<p>Opening and closing items are interchangeable when specified as the text to replace or delete.</p>
+<p>The same rule applies when specifying text to replace or delete, but either symbol will work if there is no internal whitespace.</p>
 
 <h4>Examples:</h4>
 
@@ -133,8 +135,8 @@ to <code>if (a &gt; 100) doSomething();</code></strong></p>
 <li>Invoke the Command Palette (<code>CTRL-SHIFT-P</code>/<code>CMD-SHIFT-P</code>)</li>
 <li>Select <strong>Surround: delete surround</strong>
 </li>
-<li>Type <code>{</code> or <code>}</code> and press enter</li>
-</ul><p>Note that when used as a search pattern rather than a replacement pattern the opening and closing symbols are interchangeable.</p>
+<li>Type <code>{</code> and press enter</li>
+</ul><p>Note that by using the opening brace we remove the internal whitespace as well as the surrounding braces. You can specify the closing brace if you want to retain the whitespace. (If there was no internal whitespace either symbol would work to remove the braces.)</p>
 
 <hr><h3>Tag-aware</h3>
 
