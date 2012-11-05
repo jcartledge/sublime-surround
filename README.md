@@ -151,8 +151,8 @@ There are no default key mappings; functionality is accessed through the Sublime
 There's nothing to stop you from creating mappings in your `User/Default.sublime-keymap` file. The commands you can map are:
 
  * `surround_selection`
- * `change_surround`
- * `delete_surround`
+ * `surround_change`
+ * `surround_delete`
 
 Vim-surround compatible mappings for [Vintage](http://www.sublimetext.com/docs/2/vintage.html) are available as a separate plugin here: <https://github.com/jcartledge/vintage-sublime-surround>
 
