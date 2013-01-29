@@ -12,6 +12,8 @@ It's a loving homage to [Tim Pope](https://github.com/tpope)'s [vim-surround](ht
 
 Vim-surround compatible mappings for [Vintage](http://www.sublimetext.com/docs/2/vintage.html) are available as a separate plugin here: <https://github.com/jcartledge/vintage-sublime-surround>
 
+**Please note Sublime-surround is not yet compatible with SublimeText 3. See [#10](https://github.com/jcartledge/sublime-surround/issues/10) for more information.**
+
 ## Installation
 
 ### Package Control
