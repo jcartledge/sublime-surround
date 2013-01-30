@@ -141,8 +141,8 @@ class SurroundChangeCommand(SurroundCommand):
             attrs = matches.group(2)
             if len(attrs) == 0:
                 attrs = '([\s]+[^>]*)?'
-            open_tag = unicode("<" + matches.group(1) + attrs + ">")
-            close_tag = unicode("</" + matches.group(1) + ">")
+            open_tag = str("<" + matches.group(1) + attrs + ">")
+            close_tag = str("</" + matches.group(1) + ">")
             return [open_tag, close_tag]
         else:
             return surround
