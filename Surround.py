@@ -2,14 +2,31 @@ import sublime
 import sublime_plugin
 import re
 
+class SurroundWindowCommand(sublime_plugin.WindowCommand):
+    """ Base class for surround window commands """
 
-class SurroundCommand(sublime_plugin.TextCommand):
-    """ Base class for surround commands
+    def input_panel(self, caption, callback):
+        self.window.show_input_panel(caption, '', callback, None, None)
+
+
+class SurroundSelectionWindowCommand(SurroundWindowCommand):
+    """ Surround the current selection(s) with something
+    """
+
+    def run(self):
+        self.input_panel('Surround with:', self.callback)
+
+    def callback(self, surround):
+        sublime.run_command('surround_selection_text', surround)
+
+
+class SurroundTextCommand(sublime_plugin.TextCommand):
+    """ Base class for surround text commands
     """
 
     def __init__(self, _):
         self.settings = sublime.load_settings('surround.sublime-settings')
-        sublime_plugin.TextCommand.__init__(self, _)
+        super(SurroundTextCommand, self).__init__(_)
 
     def pairs_for_replacement(self, surround):
         pairs = self.settings.get('surround_pairs_for_replacement')
@@ -34,33 +51,20 @@ class SurroundCommand(sublime_plugin.TextCommand):
         surround = self.tags_for_replacement(surround)
         return surround
 
-    def run_surround(self, caption, callback):
-        self.view.window().show_input_panel(caption, '', callback, None, None)
 
-
-class SurroundSelectionCommand(SurroundCommand):
+class SurroundSelectionTextCommand(SurroundTextCommand):
     """ Surround the current selection(s) with something
     """
 
-    def run(self, edit):
-        # If this is called from Vintage the selection will be reset as soon as
-        # the method returns, but we need it in the callback so we copy it here.
-        self.sel = [sel for sel in self.view.sel()]
-        self.run_surround('Surround with:', self.surround_selection)
-
-    def surround_selection(self, surround):
+    def run(self, edit, surround):
         view = self.view
         surround = self.preprocess_replacement(surround)
-        edit = view.begin_edit()
-        try:
-            for region in reversed(self.sel):
-                view.insert(edit, region.end(), surround[1])
-                view.insert(edit, region.begin(), surround[0])
-        finally:
-            view.end_edit(edit)
+        for region in reversed(view.sel()):
+            view.insert(edit, region.end(), surround[1])
+            view.insert(edit, region.begin(), surround[0])
 
 
-class SurroundChangeCommand(SurroundCommand):
+class SurroundChangeTextCommand(SurroundTextCommand):
     """ Change something surrounding the current insertion point(s) to something else
     """
 
@@ -148,7 +152,7 @@ class SurroundChangeCommand(SurroundCommand):
             return surround
 
 
-class SurroundDeleteCommand(SurroundChangeCommand):
+class SurroundDeleteTextCommand(SurroundChangeCommand):
     """ Delete something surrounding current insertion point(s)
     """
 
