@@ -6,5 +6,9 @@
     {
     	"caption": "Surround: change surround",
         "command": "surround_change_window"
+    },
+    {
+    	"caption": "Surround: delete surround",
+        "command": "surround_delete_window"
     }
 ]

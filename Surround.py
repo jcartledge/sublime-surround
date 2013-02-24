@@ -32,6 +32,16 @@ class SurroundChangeWindowCommand(SurroundWindowCommand):
         self.window.active_view().run_command('surround_change_text', args)
 
 
+class SurroundDeleteWindowCommand(SurroundWindowCommand):
+    """ Delete something surrounding something """
+
+    def caption(self): return 'Delete:'
+
+    def callback(self, match):
+        args = {"match": match, "replacement": ""}
+        self.window.active_view().run_command('surround_change_text', args)
+
+
 class SurroundTextCommand(sublime_plugin.TextCommand):
     """ Base class for surround text commands
     """
