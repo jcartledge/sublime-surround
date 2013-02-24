@@ -17,7 +17,7 @@ class SurroundSelectionWindowCommand(SurroundWindowCommand):
         self.input_panel('Surround with:', self.callback)
 
     def callback(self, surround):
-        sublime.run_command('surround_selection_text', surround)
+        self.window.active_view().run_command('surround_selection_text', {"surround": surround})
 
 
 class SurroundTextCommand(sublime_plugin.TextCommand):
@@ -152,7 +152,7 @@ class SurroundChangeTextCommand(SurroundTextCommand):
             return surround
 
 
-class SurroundDeleteTextCommand(SurroundChangeCommand):
+class SurroundDeleteTextCommand(SurroundChangeTextCommand):
     """ Delete something surrounding current insertion point(s)
     """
 
