@@ -5,19 +5,31 @@ import re
 class SurroundWindowCommand(sublime_plugin.WindowCommand):
     """ Base class for surround window commands """
 
-    def input_panel(self, caption, callback):
-        self.window.show_input_panel(caption, '', callback, None, None)
+    def run(self):
+        self.window.show_input_panel(self.caption(), '', self.callback, None, None)
 
 
 class SurroundSelectionWindowCommand(SurroundWindowCommand):
-    """ Surround the current selection(s) with something
-    """
+    """ Surround the current selection(s) with something """
 
-    def run(self):
-        self.input_panel('Surround with:', self.callback)
+    def caption(self): return 'Surround with:'
 
     def callback(self, surround):
         self.window.active_view().run_command('surround_selection_text', {"surround": surround})
+
+
+class SurroundChangeWindowCommand(SurroundWindowCommand):
+    """ Change the surrounding of the current selection """
+
+    def caption(self): return 'Match'
+
+    def callback(self, match):
+        self.match = match
+        self.window.show_input_panel('Replace with:', '', self.replace_callback, None, None)
+        
+    def replace_callback(self, replacement):
+        args = {"match": self.match, "replacement": replacement}
+        self.window.active_view().run_command('surround_change_text', args)
 
 
 class SurroundTextCommand(sublime_plugin.TextCommand):
@@ -68,20 +80,10 @@ class SurroundChangeTextCommand(SurroundTextCommand):
     """ Change something surrounding the current insertion point(s) to something else
     """
 
-    def run(self, edit):
-        self.run_surround('Match:', self.replace_with)
-
-    def replace_with(self, surround):
-        self.surround = surround
-        window = self.view.window()
-        window.show_input_panel(
-            'Replace with:', '', self.replace_surround, None, None)
-
-    def replace_surround(self, replacement):
-        search = self.search_patterns_for_surround(self.surround)
+    def run(self, edit, match, replacement):
+        search = self.search_patterns_for_surround(match)
         replacement = self.preprocess_replacement(replacement)
         view = self.view
-        edit = view.begin_edit()
         try:
             for region in reversed(view.sel()):
                 end = self.find_end(region.end(), search)
@@ -92,8 +94,6 @@ class SurroundChangeTextCommand(SurroundTextCommand):
                         self.view.replace(edit, start, replacement[0])
         except RuntimeError as err:
             sublime.error_message(str(err))
-        finally:
-            view.end_edit(edit)
 
     def find_start(self, to_pos, search):
         matches = self.find_between(0, to_pos, search)
@@ -150,15 +150,3 @@ class SurroundChangeTextCommand(SurroundTextCommand):
             return [open_tag, close_tag]
         else:
             return surround
-
-
-class SurroundDeleteTextCommand(SurroundChangeTextCommand):
-    """ Delete something surrounding current insertion point(s)
-    """
-
-    def run(self, edit):
-        self.run_surround('Delete:', self.delete_surround)
-
-    def delete_surround(self, surround):
-        self.surround = surround
-        self.replace_surround('')

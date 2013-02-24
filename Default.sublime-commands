@@ -2,5 +2,9 @@
     {
     	"caption": "Surround: surround selection",
         "command": "surround_selection_window"
+    },
+    {
+    	"caption": "Surround: change surround",
+        "command": "surround_change_window"
     }
 ]
