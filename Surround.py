@@ -6,18 +6,20 @@ import re
 class SurroundWindowCommand(sublime_plugin.WindowCommand):
     """ Base class for surround window commands """
 
-    def run(self):
+    def run(self, sel=None):
+        self.sel = sel
         self.window.show_input_panel(self.caption(), '', self.callback, None, None)
 
 
-class SurroundSelectionCommand(SurroundWindowCommand):
+class SurroundSelectionWindowCommand(SurroundWindowCommand):
     """ Surround the current selection(s) with something """
 
     def caption(self):
         return 'Surround with:'
 
     def callback(self, surround):
-        self.window.active_view().run_command('surround_selection_text', {"surround": surround})
+        args = {"surround": surround, "sel": self.sel}
+        self.window.active_view().run_command('surround_selection', args)
 
 
 class SurroundChangeCommand(SurroundWindowCommand):
@@ -78,14 +80,27 @@ class SurroundTextCommand(sublime_plugin.TextCommand):
         return surround
 
 
-class SurroundSelectionTextCommand(SurroundTextCommand):
+class SurroundSelectionCommand(SurroundTextCommand):
     """ Surround the current selection(s) with something
     """
 
-    def run(self, edit, surround):
+    def run(self, edit, surround=None, sel=None):
         view = self.view
+
+        # Vintage needs a text command for `ys<motion>`
+        if(surround is None):
+            sel = [[region.begin(), region.end()] for region in view.sel()]
+            args = {"sel": sel}
+            return view.window().run_command('surround_selection_window', args)
+
+        if(sel is None):
+            sel = view.sel()
+        else:
+            sel = [sublime.Region(int(region[0]), int(region[1]))
+                for region in sel]
+
         surround = self.preprocess_replacement(surround)
-        for region in reversed(view.sel()):
+        for region in reversed(sel):
             view.insert(edit, region.end(), surround[1])
             view.insert(edit, region.begin(), surround[0])
 
