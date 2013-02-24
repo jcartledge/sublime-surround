@@ -1,14 +1,14 @@
 [
     {
     	"caption": "Surround: surround selection",
-        "command": "surround_selection_window"
+        "command": "surround_selection"
     },
     {
     	"caption": "Surround: change surround",
-        "command": "surround_change_window"
+        "command": "surround_change"
     },
     {
     	"caption": "Surround: delete surround",
-        "command": "surround_delete_window"
+        "command": "surround_delete"
     }
 ]

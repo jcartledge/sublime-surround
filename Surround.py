@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 import re
 
+
 class SurroundWindowCommand(sublime_plugin.WindowCommand):
     """ Base class for surround window commands """
 
@@ -9,33 +10,36 @@ class SurroundWindowCommand(sublime_plugin.WindowCommand):
         self.window.show_input_panel(self.caption(), '', self.callback, None, None)
 
 
-class SurroundSelectionWindowCommand(SurroundWindowCommand):
+class SurroundSelectionCommand(SurroundWindowCommand):
     """ Surround the current selection(s) with something """
 
-    def caption(self): return 'Surround with:'
+    def caption(self):
+        return 'Surround with:'
 
     def callback(self, surround):
         self.window.active_view().run_command('surround_selection_text', {"surround": surround})
 
 
-class SurroundChangeWindowCommand(SurroundWindowCommand):
+class SurroundChangeCommand(SurroundWindowCommand):
     """ Change the surrounding of the current selection """
 
-    def caption(self): return 'Match'
+    def caption(self):
+        return 'Match'
 
     def callback(self, match):
         self.match = match
         self.window.show_input_panel('Replace with:', '', self.replace_callback, None, None)
-        
+
     def replace_callback(self, replacement):
         args = {"match": self.match, "replacement": replacement}
         self.window.active_view().run_command('surround_change_text', args)
 
 
-class SurroundDeleteWindowCommand(SurroundWindowCommand):
+class SurroundDeleteCommand(SurroundWindowCommand):
     """ Delete something surrounding something """
 
-    def caption(self): return 'Delete:'
+    def caption(self):
+        return 'Delete:'
 
     def callback(self, match):
         args = {"match": match, "replacement": ""}
