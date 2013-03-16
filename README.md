@@ -1,6 +1,6 @@
 # sublime-surround
 
-Sublime-surround is a [SublimeText 2](http://www.sublimetext.com/) plugin for adding, deleting and modifying text around the cursor or selection.
+Sublime-surround is a plugin for [SublimeText 2 and 3](http://www.sublimetext.com/) for adding, deleting and modifying text around the cursor or selection.
 
 It makes it easy to do things like:
 
@@ -11,8 +11,6 @@ It makes it easy to do things like:
 It's a loving homage to [Tim Pope](https://github.com/tpope)'s [vim-surround](https://github.com/tpope/vim-surround), the yawning gap in my workflow when I switched from vim to SublimeText 2. While not a note-perfect port, I think it's a pretty nice translation of the concepts and functionality of the vim plugin to the sublime context.
 
 Vim-surround compatible mappings for [Vintage](http://www.sublimetext.com/docs/2/vintage.html) are available as a separate plugin here: <https://github.com/jcartledge/vintage-sublime-surround>
-
-**Please note Sublime-surround is not yet compatible with SublimeText 3. See [#10](https://github.com/jcartledge/sublime-surround/issues/10) for more information.**
 
 ## Installation
 
